@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UHNM Monthly Microbiology Quiz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #FFF8E7;
+    color: #2E5E2E;
+    margin: 0;
+    padding: 0;
+}
+        .quiz-container {
+    max-width: 850px;
+    margin: auto;
+    background: #FFFDF8;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border-top: 8px solid #D97706;
+}
+        ..question {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #2E5E2E;
+}
+        .options { list-style: none; padding: 0; }
+        .options li {
+            margin: 10px 0;
+            padding: 12px;
+            background: #F2E8D5;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+        }
+        .options li.selected { background: #b3e6b3; }
+        button {
+            background-color: #2E5E2E;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            width: 200px;
+        }
+        button:disabled { background-color: #a0a0a0; }
+        .hidden { display: none; }
+        .explanation {
+            font-size: 16px;
+            color: #333;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 6px solid #D97706;
+            text-align: left;
+            margin-top: 15px;
+        }
+      .correct {
+    background-color: #b3e6b3 !important; /* Green for correct answer */
+}
+.incorrect {
+    background-color: #ffcccc !important; /* Light red for incorrect answer */
+}
+.answer-status {
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+    </style>
+</head>
+<body>
+<div class="quiz-container">
+    <h2>🍂 UHNM Monthly Microbiology Quiz</h2>
+    <p style="font-size:18px;color:#0072ce;">September 2026</p>
+    <p style="font-size:18px;color:#0060ce;">Ticks, Trails & Autumn Tales</p>
+    <div id="intro">
+        <input type="text" id="username" placeholder="Enter your name" required>
+        <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+    <div id="quiz" class="hidden"></div>
+    <button id="submitBtn" onclick="submitAnswer()" class="hidden">Submit</button>
+    <button id="prevBtn" onclick="prevQuestion()" class="hidden">Previous</button>
+    <button id="nextBtn" onclick="nextQuestion()" class="hidden">Next</button>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "Which statement about Lyme disease is TRUE?",
+    options: [
+      "Lyme disease is the most common tick-borne infectious disease in both the USA and Europe.",
+      "Once Lyme disease is contracted, permanent immunity develops.",
+      "The tick species responsible for the worldwide transmission of Borrelia burgdorferi is Ixodes scapularis.",
+      "Ticks can transmit the Lyme disease pathogen if they attach to the body for just 1-2 hours."
+    ],
+    answer: 0,
+    explanation: "Lyme disease was first identified between 1972 and 1977 in Lyme, Connecticut, USA. Named after this town, Lyme disease is the most common tick-borne disease in the USA and Europe. It is transmitted by Ixodes species ticks, primarily Ixodes scapularis and Ixodes pacificus in the USA and Ixodes ricinus in Europe. No lasting immunity develops, and ticks must remain attached for about 36 hours to transmit the disease. Sources: UpToDate, Mandell's Infectious Diseases."
+  },
+  {
+    q: "Which statement about the clinical findings of Lyme disease is TRUE?",
+    options: [
+      "Erythema migrans appears within the first 24 hours after tick attachment.",
+      "The second stage most commonly presents with musculoskeletal and neurological symptoms.",
+      "A single skin lesion characterizes the second stage of Lyme disease.",
+      "Third-stage joint symptoms mostly affect fingers and toes."
+    ],
+    answer: 1,
+    explanation: "Lyme disease progresses through stages. Stage 1 involves erythema migrans, appearing 3-30 days after exposure. Stage 2 includes multiple skin lesions, musculoskeletal, and neurological symptoms appearing weeks after initial exposure. Stage 3 can present months to years later with arthritis, usually affecting large joints. Sources: UpToDate, Mandell's Infectious Diseases."
+  },
+  {
+    q: "Which statement about the diagnosis of Lyme disease is TRUE?",
+    options: [
+      "If a typical erythema migrans lesion is observed in the early stage of Lyme disease, serological testing is not required for diagnosis.",
+      "Lyme disease is diagnosed by detecting the pathogen in skin lesion samples using dark-field microscopy.",
+      "Neuroborreliosis can be diagnosed solely by detecting Borrelia antibodies in cerebrospinal fluid (CSF).",
+      "Neuroborreliosis can be diagnosed solely by detecting IgM positivity in serology."
+    ],
+    answer: 0,
+    explanation: "According to IDSA guidelines, clinical diagnosis based on erythema migrans does not require serological testing. If atypical, serologic tests (EIA/ELISA followed by Western blot) are recommended. Neuroborreliosis diagnosis involves serum and CSF antibody index. IgM positivity alone is insufficient. Sources: Lantos PM et al., Clinical Infectious Diseases, 2021; Allen C. Steere, Mandell's Infectious Diseases."
+  },
+  {
+    q: "Which statement about Lyme disease treatment is TRUE?",
+    options: [
+      "Not everyone diagnosed with erythema migrans requires treatment.",
+      "The recommended treatment duration for neuroborreliosis is 3-4 months.",
+      "The treatment duration for joint involvement is 1-2 months.",
+      "Ciprofloxacin is the first-line treatment for Lyme disease."
+    ],
+    answer: 2,
+    explanation: "Patients diagnosed with erythema migrans should always receive treatment. First-line options include oral doxycycline, amoxicillin, or cefuroxime axetil. Azithromycin is a second-line option for those unable to tolerate first-line antibiotics. Neuroborreliosis treatment is IV ceftriaxone for 14-28 days, while Lyme arthritis is treated orally with doxycycline, amoxicillin, or cefuroxime axetil for 1-2 months. Sources: Lantos PM, et al. Clinical Infectious Diseases, 2021."
+  }
+  ,{
+    q: "Who should receive prophylaxis for Lyme disease?",
+    options: [
+      "Anyone with a tick bite within the first 72 hours",
+      "Immunosuppressed individuals with a tick bite, regardless of risk level",
+      "Anyone living in a high-risk area who has been bitten by an Ixodes tick",
+      "Individuals in high-risk areas who have had an Ixodes tick attached for more than 36 hours"
+    ],
+    answer: 3,
+    explanation: "IDSA guidelines recommend prophylaxis only after high-risk exposure, defined as Ixodes tick attachment in an endemic area for ≥36 hours. If these criteria are not met, a 'watchful waiting' approach is preferred. Prophylaxis involves a single 200 mg doxycycline dose within 72 hours after tick removal. Sources: Lantos PM, et al. Clinical Infectious Diseases, 2021."
+}
+
+];
+
+let current = 0;
+let selectedAnswers = new Array(questions.length).fill(null);
+
+function startQuiz() {
+  const username = document.getElementById("username").value.trim();
+  if (!username) {
+    alert("Enter your name first!");
+    return;
+  }
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  document.getElementById("submitBtn").classList.remove("hidden");
+  loadQuestion();
+}
+
+function loadQuestion() {
+  const q = questions[current];
+  const selected = selectedAnswers[current];
+
+  document.getElementById("quiz").innerHTML = `
+    <div id='questionNumber' style='font-weight:bold;margin-bottom:10px;color:#0072ce;'>
+      Question ${current + 1}/${questions.length}
+    </div>
+    <div class='question'>${q.q}</div>
+    <ul class='options'>
+      ${q.options.map((opt, i) => `
+        <li onclick='select(${i})' id='opt${i}' class='${
+          selected !== null 
+          ? (i === q.answer ? "correct" : (i === selected ? "incorrect" : "")) 
+          : ""
+        } ${selected === i ? "selected" : ""}'>
+          ${opt}
+        </li>`).join('')}
+    </ul>
+    <div id='answerStatus' class='answer-status'></div>
+    <div id='exp' class='explanation ${selected === null ? "hidden" : ""}'>${q.explanation}</div>
+  `;
+
+  if (selected !== null) {
+    document.getElementById('answerStatus').textContent = selected === q.answer ? 'Correct!' : 'Incorrect!';
+  }
+
+  document.getElementById("submitBtn").disabled = selected !== null;
+  document.getElementById("nextBtn").classList.toggle('hidden', false);
+  document.getElementById("prevBtn").classList.toggle('hidden', current === 0);
+}
+
+
+
+function select(i) {
+  if (selectedAnswers[current] !== null && document.getElementById("submitBtn").disabled) return;
+  
+  document.querySelectorAll('.options li').forEach(o => o.classList.remove('selected'));
+  document.getElementById(`opt${i}`).classList.add('selected');
+  
+  selectedAnswers[current] = i;
+}
+
+
+function submitAnswer(){
+  if(selectedAnswers[current] === null){
+    alert('Select an answer first!');
+    return;
+  }
+
+  const q = questions[current];
+  const selected = selectedAnswers[current];
+
+  document.querySelectorAll('.options li').forEach((option, i) => {
+    if (i === q.answer) option.classList.add('correct');
+    else if (i === selected) option.classList.add('incorrect');
+  });
+
+  const status = selected === q.answer ? 'Correct!' : 'Incorrect!';
+  document.getElementById('answerStatus').textContent = status;
+
+  document.getElementById('exp').classList.remove('hidden');
+  document.getElementById("submitBtn").disabled = true;
+}
+
+
+function nextQuestion(){
+  if(current<questions.length-1){
+    current++;
+    loadQuestion();
+  }
+}
+
+function prevQuestion(){
+  if(current>0){
+    current--;
+    loadQuestion();
+  }
+}
+function showScore() {
+    const score = selectedAnswers.filter((answer, i) => answer === questions[i].answer).length;
+    document.getElementById("quiz").innerHTML = `
+        <h3>🍂 Quiz Completed!</h3>
+
+<p>Your Score: ${score} out of ${questions.length}</p>
+
+<p>Thank you for participating!</p>
+
+<p>You can now close the window or revisit your answers.</p>
+
+<div style="
+background:#FFF3CD;
+border-left:6px solid #D97706;
+padding:15px;
+margin-top:20px;
+border-radius:8px;
+text-align:left;
+color:#5C4033;">
+
+<h4 style="margin-top:0;">💡 UHNM Pearl of the Month</h4>
+
+A tick carrying Lyme disease usually needs to remain attached for approximately
+<b>36 hours or longer</b> before transmission becomes likely.
+
+Prompt tick removal is one of the simplest and most effective ways to reduce
+the risk of Lyme disease.
+
+</div>
+    `;
+    document.getElementById("submitBtn").classList.add("hidden");
+    document.getElementById("nextBtn").classList.add("hidden");
+
+    // Previous button remains visible
+    document.getElementById("prevBtn").classList.remove("hidden");
+}
+
+
+function nextQuestion(){
+    if(current < questions.length - 1){
+        current++;
+        loadQuestion();
+    } else {
+        showScore();
+    }
+}
+
+
+
+</script>
+
+
+</body>
+</html>
