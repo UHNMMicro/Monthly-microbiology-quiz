@@ -88,9 +88,8 @@
     <p style="font-size:18px;color:#0072ce;">September 2026</p>
     <p style="font-size:18px;color:#0060ce;">Ticks, Trails & Autumn Tales</p>
     <div id="intro">
-        <input type="text" id="username" placeholder="Enter your name" required>
-        <button onclick="startQuiz()">Start Quiz</button>
-    </div>
+    <button onclick="startQuiz()">Start Quiz</button>
+</div>
     <div id="quiz" class="hidden"></div>
     <button id="submitBtn" onclick="submitAnswer()" class="hidden">Submit</button>
     <button id="prevBtn" onclick="prevQuestion()" class="hidden">Previous</button>
@@ -161,11 +160,6 @@ let current = 0;
 let selectedAnswers = new Array(questions.length).fill(null);
 
 function startQuiz() {
-  const username = document.getElementById("username").value.trim();
-  if (!username) {
-    alert("Enter your name first!");
-    return;
-  }
   document.getElementById("intro").classList.add("hidden");
   document.getElementById("quiz").classList.remove("hidden");
   document.getElementById("submitBtn").classList.remove("hidden");
