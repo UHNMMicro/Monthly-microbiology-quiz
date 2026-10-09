@@ -1,26 +1,52 @@
-# UHNM Monthly Microbiology Quiz
+# Monthly Microbiology Quiz
 
-A monthly educational quiz series for healthcare professionals covering microbiology, infectious diseases, diagnostics and antimicrobial stewardship.
+A monthly educational quiz series for healthcare professionals covering microbiology, infectious diseases, diagnostics, antimicrobial stewardship, vaccination and infection prevention.
 
 ## Current Quiz
 
-September 2026 – Lyme Disease
+🎃 October 2026 – Influenza: Stay Strong. Get Vaccinated.
 
-## Live Quiz
+**Quiz Link**
+
+https://UHNMMicro.github.io/Monthly-microbiology-quiz/influenza-october-2026.html
+
+---
+
+## Previous Quizzes
+
+🍂 September 2026 – Lyme Disease
+
+https://UHNMMicro.github.io/Monthly-microbiology-quiz/lyme-september-2026.html
+
+---
+
+## Quiz Hub
+
+Access the complete quiz archive and latest quiz here:
 
 https://UHNMMicro.github.io/Monthly-microbiology-quiz/
 
+---
+
 ## About
 
-This quiz is intended as a short educational resource for doctors, nurses, ANPs, pharmacists, students and allied health professionals.
+The UHNM Monthly Microbiology Quiz is a short educational resource designed for doctors, nurses, pharmacists, prescribers, ACPs, ANPs, medical students and allied health professionals.
 
-No patient-identifiable or confidential information is collected or stored.
+Each quiz consists of five questions with explanations, references and key learning points. Topics are selected to be seasonally relevant and applicable to everyday clinical practice.
 
-Created by:
+No patient-identifiable, confidential or personal information is collected or stored.
+
+Anonymous website usage statistics may be collected to help improve future quizzes.
+
+---
+
+## Developed by
 
 Dr Huseyin Bilgin  
-Dr Krishna Banavathi
+Specialty Doctor in Microbiology
+
+Dr Krishna Banavathi  
+Consultant Microbiologist
 
 Department of Microbiology  
 University Hospitals of North Midlands NHS Trust
-``
