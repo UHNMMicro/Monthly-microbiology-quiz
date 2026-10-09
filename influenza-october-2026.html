@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UHNM Monthly Microbiology Quiz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #FFF8E7;
+    color: #5B2C6F;
+    margin: 0;
+    padding: 0;
+}
+        .quiz-container {
+    max-width: 850px;
+    margin: auto;
+    background: #FFFDF8;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border-top: 8px solid #E67E22;
+}
+        .question {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #5B2C6F;
+}
+        .options { list-style: none; padding: 0; }
+        .options li {
+            margin: 10px 0;
+            padding: 12px;
+            background: #F2E8D5;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+        }
+        .options li.selected { background: #b3e6b3; }
+        button {
+            background-color: #5B2C6F;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            width: 200px;
+        }
+        button:disabled { background-color: #a0a0a0; }
+        .hidden { display: none; }
+        .explanation {
+            font-size: 16px;
+            color: #333;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 6px solid #E67E22;
+            text-align: left;
+            margin-top: 15px;
+        }
+      .correct {
+    background-color: #b3e6b3 !important; /* Green for correct answer */
+}
+.incorrect {
+    background-color: #ffcccc !important; /* Light red for incorrect answer */
+}
+.answer-status {
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+    </style>
+    <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ync2iuevat");
+</script>
+    
+</head>
+<body>
+<div class="quiz-container">
+    <h2>🎃 UHNM Monthly Microbiology Quiz</h2>
+    <p style="font-size:18px;color:#E67E22;">October 2026</p>
+    <p style="font-size:18px;color:#5B2C6F;">Influenza. Stay Strong. Get Vaccinated.</p>
+    <div id="intro">
+    <button onclick="startQuiz()">Start Quiz</button>
+</div>
+    <div id="quiz" class="hidden"></div>
+    <button id="submitBtn" onclick="submitAnswer()" class="hidden">Submit</button>
+    <button id="prevBtn" onclick="prevQuestion()" class="hidden">Previous</button>
+    <button id="nextBtn" onclick="nextQuestion()" class="hidden">Next</button>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "A healthcare worker develops a cough, sore throat and mild myalgia during influenza season. What is the MOST appropriate action?",
+    options: [
+      "Continue clinical duties if there is no fever.",
+      "Start antibiotics and get a GP appointment.",
+      "Mild respiratory symptoms may still be associated with transmission of respiratory viruses.",
+      "Ignore symptoms if they are vaccinated for flu since vaccination prevents transmission."
+    ],
+    answer: 2,
+    explanation: "Respiratory viruses may be transmitted before symptoms become severe and may also be spread by individuals with mild illness. Healthcare-associated outbreaks may occur when symptomatic staff continue patient-facing activities without appropriate precautions.Healthcare workers who develop respiratory symptoms should follow current Trust guidance regarding attendance at work, infection prevention measures and use of respiratory protective equipment.Vaccination reduces risk of infection but does not eliminate transmission risk if the person is symptomatic. Sources: For more information see Influenza section in UHNM Infection Prevention Guidance."
+  },
+  {
+    q: "Which one is true for Influenza transmission and infection prevention precautions?",
+    options: [
+      "Re-testing of a patient with confirmed influenza, to decide infectiousness or to if take out of isolation is recommended.",
+      "Antiviral medication which inhibits the viral replication can prevent further transmission when given prophylactically.",
+      "Staff should wear fitted FFP3 mask at all times when caring for confirmed influenza patients to prevent transmission.",
+      "Influenza can only be transmitted if the person is febrile."
+    ],
+    answer: 1,
+    explanation: "Antivirals such as oseltamivir may be used for post-exposure prophylaxis in selected high-risk individuals and outbreak settings. By preventing infection and reducing viral replication, they may contribute to reducing onward transmission.Routine repeat influenza PCR testing is not generally recommended to determine when isolation precautions can be discontinued. Appropriate PPE should be selected according to the clinical situation and local infection prevention guidance. A fluid resistant surgical mask with proper hand hygiene prevents influenza transmission in the workplace. FFP3 masks are only needed in case of aerosol generating procedures. Influenza transmission may occur one or two days before fever develops and even before symptoms become apparent. Sources: UKHSA Guidance on use of antiviral agents for the treatment and prophylaxis of seasonal influenza."
+  },
+  {
+    q: "Which ONE of the following statements regarding influenza vaccination is CORRECT?",
+    options: [
+      "Influenza vaccination reduces risk of acquiring other respiratory viral infections.",
+      "Influenza vaccination is contraindicated during pregnancy.",
+      "Influenza vaccination has been associated with a reduction in major cardiovascular events, including heart attack and stroke.",
+      "Influenza vaccination should be avoided in patients with diabetes."
+    ],
+    answer: 2,
+    explanation: `Many people associate influenza vaccination solely with preventing respiratory illness. However, influenza infection can trigger systemic inflammation, endothelial dysfunction and pro-thrombotic changes that increase the risk of acute cardiovascular events.
+ 
+Influenza vaccination has been associated with a reduction in major adverse cardiovascular events, particularly among individuals with established cardiovascular disease.
+ 
+Influenza vaccination is recommended during pregnancy and for patients with chronic medical conditions, including diabetes. Influenza vaccination does not provide protection against all respiratory viruses.
+ 
+Sources: For more information regarding influenza and cardiac events see: Yeda Wu et al. Influenza vaccination and the risk of myocardial infarction: a meta-epidemiology study. BMC Public Health. 2026;26:850. DOI: 10.1186/s12889-026-26541-y.`
+  },
+  {
+    q: "A member of the nursing staff notes that a patient symptomatic with the flu has been touching bed rails and bedside tables. How long can influenza viruses remain infectious on nonporous hard surfaces if not disinfected?",
+    options: [
+      "10 to 15 minutes.",
+      "1 to 2 hours.",
+      "24 to 48 hours.",
+      "Up to 2 weeks."
+    ],
+    answer: 2,
+    explanation: `Influenza is primarily a respiratory droplet virus, but fomite transmission (touching contaminated surfaces) plays a significant role in healthcare environments like hospital wards.
+
+Studies show that the influenza virus is relatively stable on nonporous, hard surfaces (such as stainless steel bed rails, plastic call bells and laminated overbed tables), where it can remain infectious for 24 to 48 hours.
+
+On porous materials (such as cotton scrubs, tissues and linens), the virus degrades much faster, typically surviving for less than 8 to 12 hours.
+
+Regular environmental decontamination alongside standard hand hygiene reduces the risk of transmission from contaminated surfaces.`
+  }
+  ,{
+    q: "When should empirical antiviral therapy (such as Oseltamivir/Tamiflu) ideally be initiated in a hospitalised patient suspected of having influenza?",
+    options: [
+      "Only after a positive laboratory multiplex PCR result is returned.",
+      "As soon as possible, ideally within 48 hours of symptom onset, without waiting for lab confirmation.",
+      "Only if the patient develops secondary pneumococcal pneumonia.",
+      "Automatically to all patients admitted with any respiratory symptom regardless of timeline."
+    ],
+    answer: 1,
+    explanation: "For hospitalised patients suspected of having influenza, empirical antiviral therapy (such as Oseltamivir/Tamiflu) should be initiated immediately—ideally within 48 hours of symptom onset—without waiting for laboratory confirmation. While the 48-hour window is critical, national guidelines state that for patients with severe, complicated, or progressive illness requiring hospital admission, antiviral treatment should still be started empirically even if the patient presents outside the 48-hour window. Source: UK Health Security Agency (UKHSA) Guidance: The official UKHSA Guidance on Use of Antiviral Agents for the Treatment and Prophylaxis of Seasonal Influenza"
+}
+
+];
+
+let current = 0;
+let selectedAnswers = new Array(questions.length).fill(null);
+
+function startQuiz() {
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  document.getElementById("submitBtn").classList.remove("hidden");
+  loadQuestion();
+}
+
+function loadQuestion() {
+  const q = questions[current];
+  const selected = selectedAnswers[current];
+
+  document.getElementById("quiz").innerHTML = `
+    <div id='questionNumber' style='font-weight:bold;margin-bottom:10px;color:#E67E22;'>
+      Question ${current + 1}/${questions.length}
+    </div>
+    <div class='question'>${q.q}</div>
+    <ul class='options'>
+      ${q.options.map((opt, i) => `
+        <li onclick='select(${i})' id='opt${i}' class='${
+          selected !== null 
+          ? (i === q.answer ? "correct" : (i === selected ? "incorrect" : "")) 
+          : ""
+        } ${selected === i ? "selected" : ""}'>
+          ${opt}
+        </li>`).join('')}
+    </ul>
+    <div id='answerStatus' class='answer-status'></div>
+    <div id='exp' class='explanation ${selected === null ? "hidden" : ""}'>${q.explanation}</div>
+  `;
+
+  if (selected !== null) {
+    document.getElementById('answerStatus').textContent = selected === q.answer ? 'Correct!' : 'Incorrect!';
+  }
+
+  document.getElementById("submitBtn").disabled = selected !== null;
+  document.getElementById("nextBtn").classList.toggle('hidden', false);
+  document.getElementById("prevBtn").classList.toggle('hidden', current === 0);
+}
+
+
+
+function select(i) {
+  if (selectedAnswers[current] !== null && document.getElementById("submitBtn").disabled) return;
+  
+  document.querySelectorAll('.options li').forEach(o => o.classList.remove('selected'));
+  document.getElementById(`opt${i}`).classList.add('selected');
+  
+  selectedAnswers[current] = i;
+}
+
+
+function submitAnswer(){
+  if(selectedAnswers[current] === null){
+    alert('Select an answer first!');
+    return;
+  }
+
+  const q = questions[current];
+  const selected = selectedAnswers[current];
+
+  document.querySelectorAll('.options li').forEach((option, i) => {
+    if (i === q.answer) option.classList.add('correct');
+    else if (i === selected) option.classList.add('incorrect');
+  });
+
+  const status = selected === q.answer ? 'Correct!' : 'Incorrect!';
+  document.getElementById('answerStatus').textContent = status;
+
+  document.getElementById('exp').classList.remove('hidden');
+  document.getElementById("submitBtn").disabled = true;
+}
+
+
+function nextQuestion(){
+  if(current<questions.length-1){
+    current++;
+    loadQuestion();
+  }
+}
+
+function prevQuestion(){
+  if(current>0){
+    current--;
+    loadQuestion();
+  }
+}
+function showScore() {
+    const score = selectedAnswers.filter((answer, i) => answer === questions[i].answer).length;
+    document.getElementById("quiz").innerHTML = `
+        <h3>🎃 Quiz Completed!</h3>
+
+<p>Your Score: ${score} out of ${questions.length}</p>
+
+<p>Thank you for participating!</p>
+
+<p>You can now close the window or revisit your answers.</p>
+
+<div style="
+background:#FFF3CD;
+border-left:6px solid #E67E22;
+padding:15px;
+margin-top:20px;
+border-radius:8px;
+text-align:left;
+color:#5C4033;">
+
+<h4 style="margin-top:0;">💡 UHNM Pearl of the Month</h4>
+
+Influenza vaccination has been associated with a <b>reduction in major adverse cardiovascular events</b>, particularly in patients with established cardiovascular disease.
+
+Flu vaccination is now available across UHNM for eligible staff and patients.
+
+<a href="http://uhnm/latest-news/categories/flu-vaccinations/">👉 Flu Vaccination Information & Booking</a>
+
+</div>
+    `;
+    document.getElementById("submitBtn").classList.add("hidden");
+    document.getElementById("nextBtn").classList.add("hidden");
+
+    // Previous button remains visible
+    document.getElementById("prevBtn").classList.remove("hidden");
+}
+
+
+function nextQuestion(){
+    if(current < questions.length - 1){
+        current++;
+        loadQuestion();
+    } else {
+        showScore();
+    }
+}
+
+
+
+</script>
+
+<hr>
+
+<p style="font-size:12px;color:#666;text-align:center;padding:15px;">
+UHNM Monthly Microbiology Quiz<br>
+Educational resource only.<br>
+No patient-identifiable or confidential information is collected or stored.<br><br>
+
+Created by:<br>
+Dr Huseyin Bilgin & Dr Krishna Banavathi<br>
+Department of Microbiology, UHNM
+</p>
+
+</body>
+</html>
