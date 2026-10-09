@@ -258,6 +258,9 @@ function prevQuestion(){
   }
 }
 function showScore() {
+    if (typeof clarity !== "undefined") {
+        clarity("event", "October Quiz Completed");
+    }
     const score = selectedAnswers.filter((answer, i) => answer === questions[i].answer).length;
     document.getElementById("quiz").innerHTML = `
         <h3>🎃 Quiz Completed!</h3>
