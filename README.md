@@ -36,7 +36,9 @@ Each quiz consists of five questions with explanations, references and key learn
 
 No patient-identifiable, confidential or personal information is collected or stored.
 
-Anonymous website usage statistics may be collected to help improve future quizzes.
+Anonymous, cookieless website usage statistics are collected via GoatCounter strictly to monitor hit counts and help improve future quizzes. 
+
+This setup is 100% GDPR compliant and does not track individual users.
 
 ---
 
