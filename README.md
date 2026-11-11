@@ -4,6 +4,20 @@ A monthly educational quiz series for healthcare professionals covering microbio
 
 ## Current Quiz
 
+💊 November 2026 – World AMR Awareness Week: Every Antibiotic Decision Matters
+
+🕹️ Special Edition: Interactive AMR Arcade Challenge
+
+Fight antimicrobial resistance by answering five antimicrobial stewardship questions. Each correct answer defeats a group of resistant bacteria, while incorrect answers allow resistance to spread.
+
+Quiz Link
+
+https://UHNMMicro.github.io/Monthly-microbiology-quiz/WAAW-november-2026.html
+
+---
+
+## Previous Quizzes
+
 🎃 October 2026 – Influenza: Stay Strong. Get Vaccinated.
 
 **Quiz Link**
@@ -11,8 +25,6 @@ A monthly educational quiz series for healthcare professionals covering microbio
 https://UHNMMicro.github.io/Monthly-microbiology-quiz/influenza-october-2026.html
 
 ---
-
-## Previous Quizzes
 
 🍂 September 2026 – Lyme Disease
 
