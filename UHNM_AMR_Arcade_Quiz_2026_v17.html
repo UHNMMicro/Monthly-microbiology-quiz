@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UHNM AMR Awareness Week — Arcade Quiz</title>
+<style>
+:root{--navy:#09233d;--blue:#0072ce;--mint:#81ef9c;--paper:#f7fbff}
+*{box-sizing:border-box}body{margin:0;background:#eaf1f7;color:#17334c;font:16px/1.5 Arial,sans-serif}.wrap{max-width:880px;margin:25px auto;padding:24px;background:white;border-top:7px solid var(--blue);border-radius:12px;box-shadow:0 7px 25px #143a5a1a}h1{margin:0;text-align:center;color:#003865;font-size:clamp(22px,4vw,32px)}.subtitle{text-align:center;color:#006bb4;font-weight:bold;margin:6px 0 20px}.arcade{background:var(--navy);padding:13px;border:5px solid #345f88;border-radius:9px;max-width:660px;margin:auto;box-shadow:inset 0 0 0 2px #09233d}canvas{display:block;width:100%;height:auto;image-rendering:pixelated;background:#061729}.arcade-controls{display:flex;justify-content:space-between;gap:8px;align-items:center;max-width:660px;margin:9px auto 0;color:#53677c;font-size:13px}.small-btn{width:auto;padding:7px 12px;font-size:13px;margin:0}.intro-text{max-width:660px;margin:15px auto;padding:13px;background:#eaf5fd;border-left:4px solid var(--blue)}.form{max-width:530px;margin:16px auto;text-align:left}label{display:block;font-weight:bold;margin:12px 0 5px}select,input{width:100%;padding:11px;border:1px solid #9db5c9;border-radius:6px;font:inherit}button{background:var(--blue);border:0;border-radius:6px;padding:12px 20px;color:white;font-weight:bold;font-size:16px;cursor:pointer}button:hover:not(:disabled){background:#005a9f}button:disabled{background:#91a5b6;cursor:not-allowed}.primary{display:block;max-width:350px;width:100%;margin:20px auto 0}.hidden{display:none!important}.progress{text-align:center;color:#0067b3;font-weight:bold}.question{font-size:21px;font-weight:bold;margin:14px 0}.choices{display:grid;gap:10px}.choice{display:block;text-align:left;background:#e9f4fc;color:#17334c;border:2px solid transparent;padding:14px;width:100%;font-weight:normal}.choice:hover:not(:disabled){background:#e9f4fc;color:#17334c}.choice.selected:hover:not(:disabled){background:#d7edff;color:#17334c}.choice:focus-visible{outline:3px solid #0072ce;outline-offset:2px}.choice.selected{border-color:#0072ce;background:#d7edff}.choice.correct{border-color:#278847;background:#d8f4dd}.choice.wrong{border-color:#c63636;background:#ffe0e0}.feedback{margin:18px 0;padding:14px;background:#f1f6fa;border-left:4px solid #0072ce;white-space:pre-line}.buttons{text-align:center}.buttons button{margin:6px}.muted{color:#657b8b;font-size:13px}.result{text-align:center;padding:20px}.result strong{font-size:32px;color:#0066ac}a{color:#0062a6}
+.battle{background:#061729;border:4px solid #345f88;border-radius:8px;padding:15px;margin:14px auto 22px;max-width:650px;text-align:center}
+.enemy-groups{display:flex;justify-content:space-around;align-items:center;gap:8px;min-height:120px}
+.enemy-group{width:19%;display:flex;justify-content:center;align-items:center;gap:3px;flex-wrap:wrap;min-height:95px;transition:transform .35s,opacity .35s}
+.enemy-group{animation:bug-sway 1.5s ease-in-out infinite alternate;animation-delay:calc(var(--i) * -0.23s)}
+.enemy-group.defeated{opacity:0;transform:translateY(-25px) scale(.1);animation:bug-defeat .65s ease-in forwards!important}
+.enemy-group.multiplying{animation:bug-multiply .65s ease-in-out 1!important}
+@keyframes bug-sway{0%{translate:0 -8px}100%{translate:0 8px}}
+@keyframes bug-defeat{0%{opacity:1;scale:1;filter:brightness(2)}35%{opacity:1;scale:1.2;filter:brightness(4)}100%{opacity:0;scale:.1;translate:0 -38px}}
+@keyframes bug-multiply{0%{scale:1;filter:brightness(1)}50%{scale:1.3;filter:brightness(2)}100%{scale:1;filter:brightness(1)}}
+@keyframes win-pop{0%{transform:scale(.6);opacity:0}55%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes loss-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+@keyframes float-sprite{from{transform:translateY(-7px)}to{transform:translateY(7px)}}
+.result-screen{background:#061729;color:#f1f8ff;border:4px solid #345f88;border-radius:9px;max-width:660px;margin:16px auto;padding:24px 12px;overflow:hidden}
+.result-screen h2{font:bold clamp(24px,5vw,36px) monospace;margin:5px 0 12px}
+.result-screen.win h2{color:#91f7a9;animation:win-pop .8s both}
+.result-screen.lose h2{color:#ff8890;animation:loss-shake .45s 2}
+.result-sprites{display:flex;justify-content:center;gap:22px;min-height:55px;align-items:center;margin:15px auto}
+.pixel-bug{display:inline-block;width:28px;height:28px;flex:0 0 28px;image-rendering:pixelated}
+.enemy-group{gap:5px;min-height:92px;align-content:center}
+.enemy-group.multiplying .pixel-bug.newborn{animation:spawn-bug .75s cubic-bezier(.18,1.4,.35,1) both}
+.enemy-group.multiplying .pixel-bug:not(.newborn){animation:bug-multiply .75s ease-in-out}
+@keyframes spawn-bug{0%{opacity:0;transform:scale(.05) translateY(-18px);filter:brightness(3)}55%{opacity:1;transform:scale(1.5) translateY(-5px);filter:brightness(2)}100%{opacity:1;transform:scale(1) translateY(0);filter:brightness(1)}}
+.result-sprites .pixel-bug{width:42px;height:42px;flex:0 0 42px;animation:float-sprite .85s ease-in-out infinite alternate}
+.battle-message{font:bold 13px monospace;color:#b1e8ff;margin-top:8px}
+.battle-message.victory{color:#86f6a2}
+#rank{color:#0066ac;font-size:24px}
+.final-battle{font:bold 15px monospace;color:#0066ac;margin:12px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.enemy-group.defeated{opacity:.1;transform:scale(.5)}}
+
+/* Compact welcome layout: preserve the complete animation and credits on laptop screens. */
+#welcome .arcade{max-width:600px;padding:7px;border-width:4px}
+#welcome .arcade-controls{max-width:600px;margin-top:5px}
+#welcome .form{margin:5px auto 0;max-width:600px}
+#welcome .primary{margin:7px auto 0;padding:9px 16px}
+#welcome .muted{line-height:1.3;margin:9px 0 0;font-size:12px}
+@media(max-height:780px) and (min-width:560px){
+ .wrap{margin:8px auto;padding:11px 20px;border-top-width:5px}
+ h1{font-size:25px}.subtitle{margin:2px 0 8px}
+ #welcome .arcade{max-width:520px}
+ #welcome .arcade-controls{max-width:520px}
+ #welcome .muted{font-size:11.5px;line-height:1.2;margin-top:6px}
+}
+@media(max-height:650px) and (min-width:560px){
+ .wrap{margin:3px auto;padding:6px 14px}
+ h1{font-size:21px}.subtitle{margin:0 0 4px;font-size:13px}
+ #welcome .arcade{max-width:420px;padding:4px;border-width:3px}
+ #welcome .arcade-controls{max-width:420px;font-size:10px;margin-top:3px}
+ #welcome .small-btn{padding:4px 7px}
+ #welcome .primary{padding:7px 10px;font-size:13px}
+ #welcome .muted{font-size:10.5px;line-height:1.12;margin-top:4px}
+}
+/* Four-pair dropdown challenge */
+.match-row{display:grid;grid-template-columns:minmax(130px,1fr) minmax(180px,1.4fr) 20px;align-items:center;gap:12px;padding:10px 12px;background:#e9f4fc;border:2px solid transparent;border-radius:7px}
+.match-row label{margin:0;color:#17334c}
+.match-select{background:white;color:#17334c;min-width:0}
+.match-row.match-correct{background:#d8f4dd;border-color:#278847}
+.match-row.match-wrong{background:#ffe0e0;border-color:#c63636}
+.match-mark{font-weight:bold}
+@media(max-width:530px){.match-row{grid-template-columns:1fr 20px;gap:6px}.match-row label{grid-column:1/-1}.match-select{grid-column:1}}
+/* Myth Buster: five independent True/False statements */
+.myth-row{background:#e9f4fc;border-radius:8px;padding:12px 14px;border:1px solid #b8d8ee}
+.myth-statement{font-weight:bold;margin-bottom:9px}
+.myth-controls{display:flex;gap:10px}
+.myth-choice{flex:1;background:#fff;color:#17334c;border:2px solid #b0cadd;padding:9px}
+.myth-choice:hover:not(:disabled){background:#d7edff;color:#17334c}
+.myth-choice.selected{background:#d7edff;border-color:#0072ce}
+.myth-choice.correct{background:#d8f4dd;border-color:#278847;color:#17334c}
+.myth-choice.wrong{background:#ffe0e0;border-color:#c63636;color:#17334c}
+.myth-choice:disabled{opacity:1;cursor:default}
+.myth-explanation{font-size:14px;line-height:1.5;margin-top:9px;color:#17334c}
+.feedback-claim{max-width:590px;margin:22px auto;padding:16px;background:#eaf5fd;border:2px solid #a4d5f4;border-radius:10px}.feedback-claim h3{margin:0 0 5px;color:#003865}.feedback-claim p{margin:7px 0 14px}.feedback-link{display:inline-block;background:#0072ce;color:#fff;text-decoration:none;padding:11px 20px;border-radius:7px;font-weight:bold}.feedback-link:hover{background:#005a9f;color:#fff}
+</style>
+</head>
+<body><main class="wrap"><h1>Monthly Microbiology Quiz</h1><div class="subtitle">World Antimicrobial Resistance Awareness Week· November 2026</div>
+<section id="welcome"><div class="arcade"><canvas id="game" width="600" height="250" role="img" aria-label="Retro animation showing antibiotic-sensitive bacteria disappearing, resistant bacteria surviving, and a shield representing infection prevention and patient safety."></canvas></div><div class="arcade-controls"><span></span><button class="small-btn" id="skip" type="button">Skip animation</button></div>
+<div class="form"><button class="primary" id="start" type="button">▶ START THE AMR CHALLENGE</button><p style="text-align:center;font-size:16px;color:#17324D;line-height:1.45;margin:12px 0;">
+<strong style="font-size:19px;color:#123B62;">🎮 HOW TO PLAY</strong><br>
+Correct answers defeat resistant bacteria; wrong answers help them multiply.<br>
+In the Myth Buster round, each statement changes the count by one.<br>
+<strong>Score 3 out of 5 or more to win!</strong>
+</p><p class="muted" style="text-align:center">Monthly Microbiology Quiz<br>Educational resource only.<br>No patient-identifiable or confidential information is collected or stored.<br><br>Created by:<br>Dr Huseyin Bilgin &amp; Dr Krishna Banavathi<br>Department of Microbiology, UHNM</p></div></section>
+<section id="quiz" class="hidden" aria-live="polite"><div class="battle" aria-label="Five clusters of resistant bacteria, with a maximum of 30 bacteria overall."><div id="enemyGroups" class="enemy-groups"></div><div id="battleMessage" class="battle-message" aria-live="polite">15 / 30 resistant bacteria remaining</div></div><div class="progress" id="progress"></div><div class="question" id="question"></div><div class="choices" id="choices"></div><div class="feedback hidden" id="feedback"></div><div class="buttons"><button id="submit" type="button" disabled>Submit answer</button><div><button id="previous" type="button" class="hidden">← Previous</button><button id="next" type="button" class="hidden">Next →</button></div></div></section>
+<section id="results" class="result hidden" aria-live="polite"><h2>Challenge complete!</h2><p>Your score</p><strong id="score"></strong><h3 id="rank"></h3><p id="rankDescription"></p><div id="finalBattle" class="final-battle"></div><div id="resultScreen" class="result-screen" aria-live="polite"><h2 id="outcome"></h2><div id="resultSprites" class="result-sprites"></div><p id="outcomeMessage"></p></div><p>Thank you for helping raise awareness of antimicrobial resistance.</p><div class="feedback-claim"><h3>🏆 Claim your certificate!</h3><p>Complete our 1-minute anonymous feedback form. After submitting, use the certificate link on the thank-you screen.</p><a class="feedback-link" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=3DYvxVrTjUqSkYBOtJZb1Q22k93izedDsHWFl5BTI_ZUOVE3ODRaSk1BQ1VFUlQxOVRRTjBYSVlWMy4u" target="_blank" rel="noopener noreferrer">Complete feedback ↗</a></div><button id="restart" type="button">Play again</button></section>
+</main><script>
+'use strict';
+const questions=[
+{q:'Which statement about antimicrobial resistance (AMR) is TRUE?',options:['The human body becomes resistant to antibiotics.','AMR only affects people who take antibiotics frequently.','Bacteria can become resistant to antibiotics, making infections harder to treat.','AMR occurs only in hospitals.'],answer:2,explanation:'Microorganisms, not people, develop resistance. Resistant infections can affect anyone, both in hospitals and in the community. \\n\\nAlthough repeated or inappropriate antibiotic use increases the risk of developing and selecting resistant bacteria, anyone can be affected by antimicrobial resistance. \\n\\nResistant organisms can spread between individuals, healthcare settings, care homes, the environment and the food chain. \\n\\nEven people who have rarely or never taken antibiotics can develop resistant infections.'},
+{type:'matching',q:'ANTIBIOTIC INTERACTION MATCH-UP — Match each antibiotic with its clinically important interaction. Select an answer for all four antibiotics, then press SUBMIT.',options:['Statins','Alcohol','SSRIs','Oral contraceptives'],antibiotics:['Clarithromycin','Metronidazole','Linezolid','Rifampicin'],answer:[0,1,2,3],explanation:'Clarithromycin + statins: inhibits CYP3A4 and increases exposure to certain statins, particularly simvastatin, raising the risk of myopathy and rhabdomyolysis.\\n\\nMetronidazole + alcohol: UK advice recommends avoiding alcohol during treatment and for 48 hours afterwards; evidence for a consistent disulfiram-like reaction is uncertain.\\n\\nLinezolid + SSRIs: linezolid has MAOI activity and the combination may cause serotonin syndrome.\\n\\nRifampicin + oral contraceptives: enzyme induction reduces hormonal contraceptive effectiveness; alternative or additional contraception is needed according to current guidance.'},
+{q:'A patient receiving IV antibiotics has improved after 48–72 hours. What is the best next step?',options:['Continue IV antibiotics until discharge, as IV treatment is stronger than oral treatment.','Continue IV antibiotics until inflammatory markers return to normal.','Review treatment and switch to oral antibiotics if IVOS criteria are met.','Stop all antibiotics immediately, regardless of the diagnosis.'],answer:2,explanation:'IV does not always mean better! Review IV antibiotics at 48–72 hours and consider an oral switch when appropriate.\n\nRemember ACED for IVOS:\nA — Afebrile: temperature normal for the previous 24 hours.\nC — Clinically improving: symptoms improving and NEWS score reducing.\nE — Eating and drinking: tolerating oral intake and able to absorb oral medication, without vomiting.\nD — Deep-seated infection?: check for infections needing prolonged IV therapy or specialist review.\n\nAn effective oral option must be available. Review the diagnosis, cultures and local guidance; some infections still need IV treatment. CRP does not have to return to normal before an oral switch.'},
+{type:'myth',q:'AMR MYTH BUSTER — Are these five statements TRUE or FALSE?',statements:[
+{q:'Antibiotics are effective against colds and flu.',answer:false,explanation:'Colds and flu are caused by viruses. Antibiotics do not treat viral infections, although a separate bacterial infection may sometimes require treatment.'},
+{q:'Taking antibiotics can cause diarrhoea, colitis and allergic reactions.',answer:true,explanation:'Antibiotics can disturb normal gut bacteria, cause diarrhoea or C. difficile infection, and sometimes trigger allergic reactions.'},
+{q:'Antibiotic-resistant bacteria can only spread between people who are unwell.',answer:false,explanation:'Healthy people may carry resistant bacteria without symptoms and pass them to others. This is asymptomatic carriage.'},
+{q:'Taking antibiotics can increase your risk of carrying resistant bacteria.',answer:true,explanation:'Antibiotic exposure can select for resistant bacteria, increasing the risk of carriage and sometimes subsequent resistant infection.'},
+{q:'Antibiotic-resistant bacteria can spread from person to person.',answer:true,explanation:'Resistant bacteria can spread through contact, including via contaminated hands, surfaces and equipment. Infection prevention reduces transmission.'}
+],explanation:'Antibiotic resistance affects everyone. Use antibiotics only when indicated, and prevent spread through effective infection prevention and control.'},
+{q:'Approximately how many deaths worldwide were directly attributable to bacterial AMR in 2021?',options:['100,000','500,000','1.14 million','10 million'],answer:2,explanation:'The Global Burden of Disease 2021 analysis estimated about 1.14 million deaths directly attributable to bacterial AMR in 2021 (The Lancet, 2024).'}
+];
+let current=0,answers=[],submitted=[],battleFlash=null,bugGroups=[3,3,3,3,3],newBugs=[],battleNotice='',battleAnimating=false;const $=id=>document.getElementById(id);
+function startQuiz(){$('welcome').classList.add('hidden');$('results').classList.add('hidden');$('quiz').classList.remove('hidden');current=0;answers=Array(questions.length).fill(null);submitted=Array(questions.length).fill(false);bugGroups=[3,3,3,3,3];newBugs=[];battleFlash=null;battleNotice='';battleAnimating=false;render();window.scrollTo(0,0)}
+function answerIsCorrect(i){const q=questions[i];return q.type==='matching'?Array.isArray(answers[i])&&answers[i].every((v,j)=>v===q.answer[j]):q.type==='myth'?Array.isArray(answers[i])&&answers[i].every((v,j)=>v===q.statements[j].answer):answers[i]===q.answer}
+function render(){
+ updateBattle();
+ const q=questions[current],done=submitted[current],match=q.type==='matching',myth=q.type==='myth';
+ $('progress').textContent=`Question ${current+1} of ${questions.length}`;
+ $('question').textContent=q.q;
+ $('choices').replaceChildren();
+ if(myth){
+   if(!Array.isArray(answers[current]))answers[current]=Array(q.statements.length).fill(null);
+   q.statements.forEach((statement,i)=>{
+     const row=document.createElement('div');row.className='myth-row';
+     const prompt=document.createElement('div');prompt.className='myth-statement';prompt.textContent=(i+1)+'. '+statement.q;row.appendChild(prompt);
+     const controls=document.createElement('div');controls.className='myth-controls';
+     [true,false].forEach(value=>{const b=document.createElement('button');b.type='button';b.className='myth-choice';b.textContent=value?'TRUE':'FALSE';b.disabled=done;if(answers[current][i]===value)b.classList.add('selected');
+       if(done&&statement.answer===value)b.classList.add('correct');else if(done&&answers[current][i]===value)b.classList.add('wrong');
+       b.addEventListener('click',()=>{answers[current][i]=value;render()});controls.appendChild(b)});row.appendChild(controls);
+     if(done){const note=document.createElement('div');note.className='myth-explanation';note.textContent=(answers[current][i]===statement.answer?'✓ Correct. ':'✗ Incorrect. ')+(statement.answer?'TRUE. ':'FALSE. ')+statement.explanation;row.appendChild(note)}
+     $('choices').appendChild(row);
+   });
+ }else if(match){
+   if(!Array.isArray(answers[current]))answers[current]=[null,null,null,null];
+   q.antibiotics.forEach((name,i)=>{
+     const row=document.createElement('div');row.className='match-row';
+     const lab=document.createElement('label');lab.textContent=name;lab.htmlFor='match-'+i;
+     const select=document.createElement('select');select.id='match-'+i;select.className='match-select';select.disabled=done;
+     const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Choose an interaction…';select.appendChild(placeholder);
+     q.options.forEach((option,j)=>{const opt=document.createElement('option');opt.value=String(j);opt.textContent=option;select.appendChild(opt)});
+     select.value=answers[current][i]===null?'':String(answers[current][i]);
+     select.addEventListener('change',()=>{
+       answers[current][i]=select.value===''?null:Number(select.value);
+       updateMatchSubmit();
+     });
+     row.append(lab,select);
+     if(done){row.classList.add(answers[current][i]===q.answer[i]?'match-correct':'match-wrong');
+       const mark=document.createElement('span');mark.className='match-mark';mark.textContent=answers[current][i]===q.answer[i]?'✓':'✗';row.appendChild(mark)}
+     $('choices').appendChild(row);
+   });
+ }else{
+   q.options.forEach((option,i)=>{
+     const b=document.createElement('button');b.type='button';b.className='choice';
+     b.textContent=String.fromCharCode(65+i)+'. '+option;
+     if(answers[current]===i)b.classList.add('selected');
+     if(done){if(i===q.answer)b.classList.add('correct');else if(i===answers[current])b.classList.add('wrong')}
+     b.disabled=done;b.addEventListener('click',()=>{answers[current]=i;render()});$('choices').appendChild(b);
+   });
+ }
+ $('submit').classList.toggle('hidden',done);
+ $('submit').textContent=myth?'Submit all five answers':match?(answers[current].every(x=>x!==null)?'Submit matches':'Select all 4 answers ('+answers[current].filter(x=>x!==null).length+'/4)'):'Submit answer';
+ $('submit').disabled=myth?(!Array.isArray(answers[current])||answers[current].some(x=>x===null)):match?(!Array.isArray(answers[current])||answers[current].some(x=>x===null)):answers[current]===null;
+ $('previous').classList.toggle('hidden',current===0);
+ $('next').classList.toggle('hidden',!done);
+ $('next').textContent=current===questions.length-1?'View score →':'Next →';
+ $('feedback').classList.toggle('hidden',!done);
+ if(done){
+   const intro=answerIsCorrect(current)?'✓ Correct!':'✗ Not quite.';
+   const partial=match?` (${answers[current].filter((v,i)=>v===q.answer[i]).length}/4 matches correct)`:myth?` (${answers[current].filter((v,i)=>v===q.statements[i].answer).length}/5 statements correct)`:'';
+   $('feedback').textContent=(intro+partial+'\n\n'+q.explanation).replace(/\\n/g,'\n');
+ }else $('feedback').textContent='';
+}
+function updateMatchSubmit(){
+ const selected=answers[current].filter(x=>x!==null).length;
+ $('submit').disabled=selected!==4;
+ $('submit').textContent=selected===4?'Submit matches':'Select all 4 answers ('+selected+'/4)';
+}
+function submitAnswer(){
+  if(battleAnimating||submitted[current]||answers[current]===null)return;
+  const q=questions[current];
+  if(q.type==='matching'&&(!Array.isArray(answers[current])||answers[current].some(x=>x===null)))return;
+  if(q.type==='myth'&&(!Array.isArray(answers[current])||answers[current].some(v=>v===null)))return;
+  const isCorrect=answerIsCorrect(current);
+  submitted[current]=true;
+  battleAnimating=true;
+  newBugs=[];
+  battleNotice='WATCH THE RESISTANT BACTERIA!';
+  battleFlash=null;
+  updateBattle();
+  // Bring the battlefield into view before changing the sprites.
+  $('quiz').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
+  const changes=q.type==='myth'?q.statements.map((statement,i)=>answers[current][i]===statement.answer?-1:1):[isCorrect?-3:3];
+  let index=0;
+  const delay=reduced?120:650;
+  function animateStep(){
+    if(index<changes.length){
+      const delta=changes[index++];
+      newBugs=[];
+      changeBugs(delta);
+      battleFlash=delta<0?'correct':'wrong';
+      battleNotice=q.type==='myth'?`MYTH ${index}/5: ${delta<0?'CORRECT — ONE DEFEATED!':'INCORRECT — ONE APPEARS!'} · ${bugGroups.reduce((a,b)=>a+b,0)}/30`:(delta<0?'HIT! Three resistant bacteria defeated!':'OH NO! Resistant bacteria multiplied!');
+      updateBattle();
+      window.setTimeout(animateStep,delay);
+    }else{
+      battleFlash=null;
+      const right=q.type==='myth'?answers[current].filter((v,i)=>v===q.statements[i].answer).length:0;
+      battleNotice=q.type==='myth'?`MYTH BUSTER: ${right}/5 correct · ${bugGroups.reduce((a,b)=>a+b,0)}/30 bacteria remain`:battleNotice;
+      battleAnimating=false;
+      render();
+      window.setTimeout(()=>$('question').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'}),reduced?100:300);
+    }
+  }
+  window.setTimeout(animateStep,reduced?100:700);
+}
+function nextQuestion(){if(battleAnimating||!submitted[current])return;if(current===questions.length-1){showResults();return}current++;render()}
+function previousQuestion(){if(!battleAnimating&&current>0){current--;render()}}
+const ranks=[
+  {name:'AMR Rookie',description:'Every champion starts somewhere. Keep learning how to protect antibiotics.'},
+  {name:'Microbe Spotter',description:'You have spotted the threat. Keep building your AMR knowledge.'},
+  {name:'Antibiotic Apprentice',description:'A promising start — your stewardship skills are growing.'},
+  {name:'Resistance Ranger',description:'Good work! You are helping defend against resistance.'},
+  {name:'Stewardship Hero',description:'Excellent! You are a strong defender of responsible antibiotic use.'},
+  {name:'AMR Arcade Champion',description:'Perfect score! Outstanding antimicrobial stewardship knowledge!'}
+];
+function correctCount(){return answers.reduce((n,a,i)=>n+(submitted[i]&&answerIsCorrect(i)?1:0),0)}
+// The question and result sprites use precisely the same pixel geometry as
+// bacterium() in the opening animation, drawn on their own tiny canvases.
+function makeBacteriumSprite(color='#ff656b',size=28){
+  const canvas=document.createElement('canvas');
+  canvas.className='pixel-bug';
+  canvas.width=44;canvas.height=44;
+  canvas.style.width=size+'px';canvas.style.height=size+'px';
+  const c=canvas.getContext('2d');
+  c.imageSmoothingEnabled=false;
+  c.translate(22,22);
+  function r(x,y,w,h,fill){c.fillStyle=fill;c.fillRect(x,y,w,h)}
+  r(-13,-8,26,16,color);
+  r(-9,-12,18,24,color);
+  r(-18,-3,5,6,color);
+  r(13,-3,5,6,color);
+  r(-5,-3,4,4,'#071a29');
+  r(5,-3,4,4,'#071a29');
+  r(-7,6,14,3,'#071a29');
+  return canvas;
+}
+// Single shared count, always between zero and thirty.
+// Keep five visible clusters; ordinary rounds change three bugs, myth statements change one.
+function changeBugs(delta){
+  if(delta<0){for(let n=0;n<(-delta);n++){
+    const g=bugGroups.findIndex(v=>v>0);if(g<0)break;bugGroups[g]--;
+  }}else if(delta>0){for(let n=0;n<delta;n++){
+    if(bugGroups.reduce((a,b)=>a+b,0)>=30)break;
+    const min=Math.min(...bugGroups),g=bugGroups.findIndex(v=>v===min);
+    bugGroups[g]++;newBugs.push(g+':'+(bugGroups[g]-1));
+  }}
+}
+function updateBattle(){
+  const container=$('enemyGroups');container.replaceChildren();
+  for(let g=0;g<5;g++){
+    const group=document.createElement('div');group.className='enemy-group';
+    group.style.setProperty('--i',g);
+    group.setAttribute('aria-label',`${bugGroups[g]} resistant bacteria in cluster ${g+1}`);
+    for(let b=0;b<bugGroups[g];b++){
+      const bug=makeBacteriumSprite();
+      if(battleFlash==='wrong'&&newBugs.includes(g+':'+b)){bug.classList.add('newborn');group.classList.add('multiplying')}
+      group.appendChild(bug);
+    }
+    container.appendChild(group);
+  }
+  const total=bugGroups.reduce((a,b)=>a+b,0),msg=$('battleMessage');
+  msg.textContent=battleNotice||`${total} / 30 resistant bacteria remaining`;
+  msg.classList.toggle('victory',battleFlash==='correct'||total===0);
+}
+
+function showResults(){
+  const score=correctCount(),rank=ranks[score];
+  $('quiz').classList.add('hidden');$('results').classList.remove('hidden');
+  $('score').textContent=score+' / '+questions.length;
+  $('rank').textContent='🏆 '+rank.name;
+  $('rankDescription').textContent=rank.description;
+  $('finalBattle').textContent=score===5?'★★★★★  PERFECT SCORE!':'★'.repeat(score)+'☆'.repeat(5-score)+'  ·  '+score+' / 5 QUIZ POINTS';
+  const won=score>=3;
+  const screen=$('resultScreen');screen.className='result-screen '+(won?'win':'lose');
+  $('outcome').textContent=won?'🏆 YOU WIN!':'⚠ GAME OVER';
+  $('outcomeMessage').textContent=won?'You held back the resistant bacteria. Keep protecting patients!':'The resistant bacteria have taken over this round. Learn and try again!';
+  const sprites=$('resultSprites');sprites.replaceChildren();
+  for(let i=0;i<(won?5:8);i++){
+    const bug=makeBacteriumSprite(won?'#79e6ff':'#ff656b',42);bug.style.animationDelay=(i*-.14)+'s';sprites.appendChild(bug);
+  }
+  window.scrollTo(0,0);
+}
+$('start').addEventListener('click',startQuiz);$('submit').addEventListener('click',submitAnswer);$('next').addEventListener('click',nextQuestion);$('previous').addEventListener('click',previousQuestion);$('restart').addEventListener('click',()=>{$('results').classList.add('hidden');$('welcome').classList.remove('hidden');window.scrollTo(0,0)});
+// Pixel-art animation. Drawn entirely offline using HTML Canvas.
+const canvas=$('game'),ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;let started=performance.now(),skip=false;const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function rect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),w,h)}
+function label(text,x,y,size=16,color='#eaf6ff'){ctx.fillStyle=color;ctx.font=`bold ${size}px monospace`;ctx.textAlign='center';ctx.fillText(text,x,y)}
+function bacterium(x,y,color,scale=1){ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.scale(scale,scale);rect(-13,-8,26,16,color);rect(-9,-12,18,24,color);rect(-18,-3,5,6,color);rect(13,-3,5,6,color);rect(-5,-3,4,4,'#071a29');rect(5,-3,4,4,'#071a29');rect(-7,6,14,3,'#071a29');ctx.restore()}
+function capsule(x,y,variant=0){
+  // Rounded, clearly recognisable two-tone capsules; no spikes or projectile trails.
+  const w=39,h=17,r=h/2;
+  const left='#ef4e59',right=variant%2?'#3589e8':'#f4f4ef';
+  ctx.save();
+  ctx.translate(Math.round(x),Math.round(y));
+  ctx.beginPath();ctx.roundRect(0,0,w,h,r);ctx.clip();
+  ctx.fillStyle=right;ctx.fillRect(0,0,w,h);
+  ctx.fillStyle=left;ctx.fillRect(0,0,w/2,h);
+  ctx.strokeStyle='#ffd5d5';ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.moveTo(w/2,1);ctx.lineTo(w/2,h-1);ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,.45)';
+  ctx.beginPath();ctx.roundRect(5,3,10,2,1);ctx.fill();
+  ctx.restore();
+  ctx.strokeStyle='#e7efff';ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.roundRect(Math.round(x)+.6,Math.round(y)+.6,w-1.2,h-1.2,r);ctx.stroke();
+}
+function shield(x,y,scale=1.55){ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.scale(scale,scale);rect(-31,-28,62,35,'#4ab6fa');rect(-25,7,50,13,'#4ab6fa');rect(-18,20,36,9,'#4ab6fa');rect(-9,29,18,7,'#4ab6fa');rect(-5,-18,10,35,'#062a4c');rect(-17,-6,34,10,'#062a4c');ctx.restore()}
+function frame(now){if(skip)return;const t=reduced?9.5:((now-started)/1000)%11;ctx.fillStyle='#061729';ctx.fillRect(0,0,600,250);for(let i=0;i<30;i++){rect((i*89+31)%600,(i*47+17)%250,2,2,'#173953')}label('AMR ARCADE',300,31,22,'#88e7ff');
+if(t<3.4){label('INAPPROPRIATE ANTIBIOTIC ATTACK',300,61,15,'#ffe58b');for(let i=0;i<5;i++){const x=85+i*102; if(t<1.7+i*.32 || i===4)bacterium(x+Math.sin(t*3+i)*5,132,i===4?'#ff656b':'#7af0a0',1.15)}if(t>.4){for(let j=0;j<4;j++){const x=Math.min(550, -75+(t-.4)*185-j*105);if(x>-40){capsule(x,166+(j%2)*23,j)}}}label('SUSCEPTIBLE BACTERIA DISAPPEAR',300,235,16,'#c5e3ff')}
+else if(t<6.6){const s=t-3.4;label('RESISTANCE SURVIVES!',300,64,17,'#ff7e83');const count=s<1?1:s<2?2:4;for(let i=0;i<count;i++)bacterium(300+(i-(count-1)/2)*88,132+Math.sin(s*5+i)*5,'#ff656b',1.1);label('RESISTANT BACTERIA MULTIPLY',300,225,13,'#ffc6c6')}
+else{shield(300,136);label('PROTECT OUR PATIENTS',300,76,23,'#a4f9b7');label('HAND HYGIENE + TESTING',300,214,18,'#c5e3ff');label('WISE ANTIBIOTIC USE',300,239,18,'#c5e3ff')}
+requestAnimationFrame(frame)}
+$('skip').addEventListener('click',()=>{skip=true;ctx.fillStyle='#061729';ctx.fillRect(0,0,600,250);shield(300,119);label('EVERY ANTIBIOTIC',300,40,22,'#a4f9b7');label('DECISION MATTERS',300,68,22,'#a4f9b7');label('PROTECT OUR PATIENTS',300,225,21,'#eaf6ff');$('skip').disabled=true;$('skip').textContent='Animation skipped'});requestAnimationFrame(frame);
+</script></body></html>
